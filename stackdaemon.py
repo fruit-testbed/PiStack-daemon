@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+from os import system
 from time import sleep
 import RPi.GPIO as GPIO
 
@@ -44,7 +44,7 @@ class StackDaemon(object):
         GPIO.setup(self._sig_pin, GPIO.IN)
 
 def sig_recieved(channel):
-    print "SIG REC"
+    system("sudo shutdown -h now")
 
 if __name__ == "__main__":
     STACK = StackDaemon()
