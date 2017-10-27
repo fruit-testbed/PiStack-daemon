@@ -16,8 +16,10 @@ class StackDaemon(object):
             interval=DEFAULT_INTERVAL,
             pulse_width=DEFAULT_PULSE_WIDTH):
         GPIO.setmode(GPIO.BCM)
+        GPIO.setwarnings(False) #stop it displaying warnings aout channel already in use
         GPIO.setup(hbt_pin, GPIO.OUT)
         GPIO.setup(sig_pin, GPIO.IN)
+        GPIO.add_event_detect(sig_pin, GPIO.RISING, callback=sig_recieved)
         self._hbt_pin = hbt_pin
         self._sig_pin = sig_pin
         self._interval = interval
@@ -33,6 +35,9 @@ class StackDaemon(object):
         GPIO.output(self._hbt_pin, GPIO.HIGH)
         sleep(self._pulse_width)
         GPIO.output(self._hbt_pin, GPIO.LOW)
+
+def sig_recieved(channel):
+    print "SIG REC"
 
 if __name__ == "__main__":
     STACK = StackDaemon()
