@@ -1,0 +1,8 @@
+#!/usr/bin/env python
+"""
+Causes shutdown to be initiated.  The daemon listening actuall causes the shutdown to start
+"""
+from stackdaemon import StackDaemon
+
+STACK = StackDaemon()
+STACK.send_signal()

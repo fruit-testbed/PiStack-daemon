@@ -19,13 +19,13 @@ class StackDaemon(object):
         GPIO.setwarnings(False) #stop it displaying warnings aout channel already in use
         GPIO.setup(hbt_pin, GPIO.OUT)
         GPIO.setup(sig_pin, GPIO.IN)
-        GPIO.add_event_detect(sig_pin, GPIO.RISING, callback=sig_recieved)
         self._hbt_pin = hbt_pin
         self._sig_pin = sig_pin
         self._interval = interval
         self._pulse_width = pulse_width
 
     def run(self):
+        GPIO.add_event_detect(self._sig_pin, GPIO.RISING, callback=sig_recieved)
         while True:
             self._send_heartbeat()
             sleep(self._interval)
@@ -35,6 +35,13 @@ class StackDaemon(object):
         GPIO.output(self._hbt_pin, GPIO.HIGH)
         sleep(self._pulse_width)
         GPIO.output(self._hbt_pin, GPIO.LOW)
+
+    def send_signal(self):
+        GPIO.setup(self._sig_pin, GPIO.OUT)
+        GPIO.output(self._sig_pin, GPIO.HIGH)
+        sleep(self._pulse_width)
+        GPIO.output(self._hbt_pin, GPIO.LOW)
+        GPIO.setup(self._sig_pin, GPIO.IN)
 
 def sig_recieved(channel):
     print "SIG REC"
