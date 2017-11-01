@@ -18,7 +18,7 @@ class StackDaemon(object):
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False) #stop it displaying warnings aout channel already in use
         GPIO.setup(hbt_pin, GPIO.OUT)
-        GPIO.setup(sig_pin, GPIO.IN)
+        GPIO.setup(sig_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         self._hbt_pin = hbt_pin
         self._sig_pin = sig_pin
         self._interval = interval
