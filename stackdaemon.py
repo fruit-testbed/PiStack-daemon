@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
     Interface for Pistack
     October/November 2017
@@ -6,10 +6,11 @@
 """
 from os import system
 from time import sleep
+from argparse import ArgumentParser
 import RPi.GPIO as GPIO
+
 from stackerrors import NoStackFound
 
-VERSION = 0.1   #Version number for the code
 DEFAULT_INTERVAL = 5
 DEFAULT_PULSE_WIDTH = 0.1
 DEFAULT_HBT_PIN = 5
@@ -56,7 +57,7 @@ class StackDaemon(object):
             for shutdown signal
         """
         if TESTING:
-            print "TESTING MODE"
+            print("TESTING MODE")
         GPIO.add_event_detect(self._sig_pin, GPIO.FALLING, callback=sig_recieved)
         while True:
             self._send_heartbeat()
@@ -96,8 +97,19 @@ def sig_recieved(channel):
     if not TESTING:
         system("sudo shutdown -h now")
     else:
-        print "signal recieved"
+        print("signal recieved")
 
 if __name__ == "__main__":
-    STACK = StackDaemon()
+    PARSER = ArgumentParser(
+        description="Send the heartbeat to the pistack board and listten for shutdown signal")
+    PARSER.add_argument(
+        "-v", "--version", action="version",
+        version="%(prog)s 0.2")
+    PARSER.add_argument(
+        "-t", "--testing", action="store_true",
+        help="Testing mode - won't shutdown on signal")
+    ARGS = PARSER.parse_args()
+    TESTING = ARGS.testing
+    print(TESTING)
+    STACK = StackDaemon(TESTING)
     STACK.run()
