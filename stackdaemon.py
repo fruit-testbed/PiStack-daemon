@@ -12,7 +12,7 @@ import RPi.GPIO as GPIO
 from stackerrors import NoStackFound
 
 DEFAULT_INTERVAL = 5
-DEFAULT_PULSE_WIDTH = 0.1
+DEFAULT_PULSE_WIDTH = 0.2
 DEFAULT_HBT_PIN = 5
 DEFAULT_SIG_PIN = 6
 DEVICE_TREE_PATH = "/proc/device-tree/hat/product"
